@@ -75,13 +75,13 @@ public class Account {
 	}
 	
 	
-	static void createAccount(Account newAccount){
+	void createAccount(){
 		
-		String newUsername =newAccount.getUsername(); 
-		String newFirstName =newAccount.getFirstName();
-		String newLastName=newAccount.getLastName();
-		String newPassword=newAccount.getPassword();
-		String newAge=Integer.toString(newAccount.getId());//change to int later
+		String newUsername =username; 
+		String newFirstName =firstName;
+		String newLastName=lastName;
+		String newPassword=password;
+		String newAge=Integer.toString(age);//change to int later
 		
 		 
 		URL URLcreateAccount;
@@ -123,7 +123,58 @@ public class Account {
 		 
 
 }
-	static void updateAccount(){
+	 void updateAccount(){ //how to make username constant?
+		String newUsername =username; 
+		String newFirstName =firstName;
+		String newLastName=lastName;
+		String newPassword=password;
+		String newAge=Integer.toString(id);//change to int later
+		String newSkills = bio.getSkills().toString();
+		String newCompletedJobs =Integer.toString(bio.getCompletedJobs());
+		String newHoursWorked = Integer.toString(bio.getHoursWorked());
+		String newDescription = bio.getDescription();
+		String newPhoneNumber = bio.getPhoneNumber();
+		
+		 
+		URL URLcreateAccount;
+		try {
+			URLcreateAccount = new URL("http://104.196.62.218/UpdateAccount.php");
+			HttpURLConnection httpUrlConnection = (HttpURLConnection) URLcreateAccount.openConnection();
+			httpUrlConnection.setRequestMethod("POST");
+			httpUrlConnection.setDoOutput(true);
+			OutputStream outputStream = httpUrlConnection.getOutputStream();
+			
+			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+			   String data_string = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(newUsername, "UTF-8") + "&" +
+			           URLEncoder.encode("firstName", "UTF-8") + "=" + URLEncoder.encode(newFirstName, "UTF-8")+ "&" +
+					   URLEncoder.encode("lastName", "UTF-8") + "=" + URLEncoder.encode(newLastName, "UTF-8")+ "&" +
+					   URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(newPassword, "UTF-8")+ "&" +
+					   URLEncoder.encode("age", "UTF-8") + "=" + URLEncoder.encode(newAge, "UTF-8")+ "&" +
+					   URLEncoder.encode("skills", "UTF-8") + "=" + URLEncoder.encode(newSkills, "UTF-8")+ "&" +
+					   URLEncoder.encode("completedJobs", "UTF-8") + "=" + URLEncoder.encode(newCompletedJobs, "UTF-8")+ "&" +
+					   URLEncoder.encode("hoursWorked", "UTF-8") + "=" + URLEncoder.encode(newHoursWorked, "UTF-8")+ "&" +
+					   URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(newDescription, "UTF-8")+ "&" +
+					   URLEncoder.encode("phoneNumber", "UTF-8") + "=" + URLEncoder.encode(newPhoneNumber, "UTF-8");
+
+			   bufferedWriter.write(data_string);
+			   bufferedWriter.flush();
+			   bufferedWriter.close();
+			   outputStream.close();
+			 //Getting data
+			   InputStream inputStream = httpUrlConnection.getInputStream();
+			  
+			   inputStream.close();
+			   httpUrlConnection.disconnect();
+			  
+
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//return newAge;
 		
 	}
 	
@@ -139,6 +190,7 @@ public class Account {
 			   OutputStream outputStream = httpUrlConnection.getOutputStream();
 			   BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
 			   String data_string = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(userName, "UTF-8");
+			   bufferedWriter.write(data_string);
 			   bufferedWriter.flush();
 			   bufferedWriter.close();
 
@@ -168,11 +220,19 @@ public class Account {
 		 return returnString;
 
 	}
+	static void parseJSON(String JSONString){ //change to allow parameter on what value is needed, if statements??
+		JSONArray ja = new JSONArray(JSONString);
+		JSONObject accountDetails = ja.getJSONObject(0);
+		JSONObject bioDetails= ja.getJSONObject(1);
+		String lname = accountDetails.getString("lastName");
+		
+	}
+	
+	
 public static void main(String[] args) {
-	Account tester = new Account("charr", "akram","hannoufa", "adwa", 7);
-				
-		createAccount(tester);
-		System.out.println(getAccount("charr"));;
-		//System.out.println(JSONText);
+	Account tester2 = new Account("trump", "Donald", "Trump", "ivank45", 70);
+	//tester2.createAccount();
+	System.out.println(getAccount("trump"));	
+	//parseJSON(getAccount("trump"));
 	}
 }

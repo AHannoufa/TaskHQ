@@ -10,6 +10,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Review {
 
 	private int id;
@@ -56,11 +59,11 @@ public class Review {
 		this.rating=rating;
 	}
 	
-	static void createReview(Review review){
-		String newSubject =review.getSubject().getUsername(); 
-		String newAuthor = review.getAuthor().getUsername();
-		String newMessage = review.getMessage();
-		String newRating = Integer.toString(review.getRating());
+	 void createReview(){
+		String newSubject =subject.getUsername(); 
+		String newAuthor = author.getUsername();
+		String newMessage = message;
+		String newRating = Integer.toString(rating);
 		 
 		URL URLcreateAccount;
 		try {
@@ -95,8 +98,8 @@ public class Review {
 			e.printStackTrace();
 		}
 	}
-	static String getReview(Review review){
-		String newSubject = review.getSubject().getUsername();
+	static String getReview(String subject){ //search by username or full name?? what is subject? account, name, or user name
+		//String newSubject = subject.getUsername();
 		String JSON_STRING;
 		String returnString="";
 		try {
@@ -106,7 +109,8 @@ public class Review {
 			   httpUrlConnection.setDoOutput(true);
 			   OutputStream outputStream = httpUrlConnection.getOutputStream();
 			   BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-			   String data_string = URLEncoder.encode("suject", "UTF-8") + "=" + URLEncoder.encode(newSubject, "UTF-8");
+			   String data_string = URLEncoder.encode("subject", "UTF-8") + "=" + URLEncoder.encode(subject, "UTF-8");
+			   bufferedWriter.write(data_string);
 			   bufferedWriter.flush();
 			   bufferedWriter.close();
 
@@ -135,6 +139,11 @@ public class Review {
 			}
 		 return returnString;
 
+	}
+	void parseJSON(String JSONText){
+		JSONArray ja = new JSONArray(JSONText);
+		JSONObject reviewDetails = new JSONObject(ja.getJSONObject(0));
+		String author = reviewDetails.getString("author");
 	}
 	
 	public static void main(String[] args) {
