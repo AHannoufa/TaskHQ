@@ -99,7 +99,7 @@ public class Review {
 		}
 	}
 	static String getReview(String subject){ //search by username or full name?? what is subject? account, name, or user name
-		//String newSubject = subject.getUsername();
+		 //newSubject = subject.getUsername();
 		String JSON_STRING;
 		String returnString="";
 		try {

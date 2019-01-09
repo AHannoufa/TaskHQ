@@ -11,6 +11,7 @@ public class Bio {
 	
 	
 	Bio(int id){
+
 		this.id=id;
 	}
 	int getId(){

@@ -221,18 +221,24 @@ public class Account {
 
 	}
 	static void parseJSON(String JSONString){ //change to allow parameter on what value is needed, if statements??
-		JSONArray ja = new JSONArray(JSONString);
-		JSONObject accountDetails = ja.getJSONObject(0);
-		JSONObject bioDetails= ja.getJSONObject(1);
-		String lname = accountDetails.getString("lastName");
-		
+		System.out.println(JSONString);
+		JSONObject obj = new JSONObject(JSONString);
+		JSONObject values = obj.getJSONObject("values");	
+		JSONArray accountDetailsArray = values.getJSONArray("accountDetails");
+		JSONArray bioDetailsArray = values.getJSONArray("bioDetails");
+		JSONObject bioDetails = bioDetailsArray.getJSONObject(0);
+		JSONObject accountDetails = accountDetailsArray.getJSONObject(0); 
+		//System.out.println(bioDetails.getString("completedJobs")); //get completed jobs
+		//System.out.println(accountDetails.getString("lastName"));//gets last name
 	}
 	
 	
 public static void main(String[] args) {
 	Account tester2 = new Account("trump", "Donald", "Trump", "ivank45", 70);
+
+	
 	//tester2.createAccount();
-	System.out.println(getAccount("trump"));	
-	//parseJSON(getAccount("trump"));
+	//System.out.println(getAccount("trump"));	
+	parseJSON(getAccount("trump"));
 	}
 }
